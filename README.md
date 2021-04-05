@@ -24,48 +24,56 @@ Programs can connect to CoralDB to access the database system using its port and
 CoralDB, 6 commands can be used, sent via a normal TCP socket stream. Sent messages **must** be terminated using the `\r\n` character sequence.
 Messages sent by CoralDB always end with said character sequence, too.
 
-```
-SET key "value"
-```
+
+### SET
+
+**Usage**: ```SET key "value"```
+
 **SET** stores `"value"` in `key`. Keys may not have whitespace in them. Values must be enclosed in double-quotes (`"`). Double-quotes inside a value may be escaped using the `\"` character sequence.
 * Responses:
   * `OK.` for successful operations.
   * `ERROR.` for unsuccessful operations.
 
-```
-GET key
-```
+### GET
+
+**Usage**: ```GET key```
+
 **GET** gets the value stored in the key `key`. If no value had been assigned to said key, the operation fails.
 * Responses:
   * `"value"` for successful operations, where `value` is the value retrieved. Note that the value is enclosed in double-quotes.
   * `ERROR.` for unsuccessful operations.
 
-```
-PROBE key
-```
+
+### PROBE
+
+**Usage**: ```PROBE key```
+
 **PROBE** succeeds if the `key` exists within the database, otherwise it fails.
 * Responses:
   * `OK.` for successful operations.
   * `ERROR.` for unsuccessful operations.
 
-```
-DROP key
-```
+### DROP
+
+**Usage**: ```DROP key```
+
 **DROP** deletes the key `key` from the database. The operation succeeds even if the key didn't previously exist.
 * Responses:
   * `OK.` for successful operations.
   * `ERROR.` for unsuccessful operations.
 
-```
-PING
-```
+### PING
+
+**Usage**: ```PING```
+
 **PING** can be used to check if CoralDB is alive.
 * Responses:
   * `OK.` for successful operations.
 
-```
-CHECKPOINT
-```
+### CHECKPOINT
+
+**Usage**: ```CHECKPOINT```
+
 **CHECKPOINT** can be used to trigger a checkpoint save.
 * Responses:
   * `OK.` once the checkpoint save has finished.
