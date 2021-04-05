@@ -24,6 +24,8 @@ Programs can connect to CoralDB to access the database system using its port and
 CoralDB, 6 commands can be used, sent via a normal TCP socket stream. Sent messages **must** be terminated using the `\r\n` character sequence.
 Messages sent by CoralDB always end with said character sequence, too.
 
+A client must establish a new connection to CoralDB every time it wants to store a different value.
+Likewise, CoralDB closes the connection after a response has been sent to the client.
 
 ### SET
 
@@ -77,3 +79,32 @@ Messages sent by CoralDB always end with said character sequence, too.
 **CHECKPOINT** can be used to trigger a checkpoint save.
 * Responses:
   * `OK.` once the checkpoint save has finished.
+
+# Example Session
+
+In this example, `\r\n` at the end of lines are omitted.
+
+```
+Client:  SET color1 "blue"
+CoralDB: OK.
+Client:  SET color2 "red"
+CoralDB: OK.
+Client:  SET color1 "other red, better than blue"
+CoralDB: OK.
+Client:  GET color2
+CoralDB: "red"
+Client:  DROP color2
+CoralDB: OK.
+Client:  GET color2
+CoralDB: ERROR.
+```
+
+# I need help! I want to contribute!
+
+If you need help on using CoralDB, please open an issue here and I will try to address it as soon as possible.
+
+Contributions are also more than welcome! Feel free to submit pull requests!
+
+# License
+
+CoralDB is released under the [BSD 2-Clause License](https://github.com/Lartu/coraldb/blob/main/LICENSE).
