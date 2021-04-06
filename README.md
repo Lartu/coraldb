@@ -27,6 +27,9 @@ Messages sent by CoralDB always end with said character sequence, too.
 A client must establish a new connection to CoralDB every time it wants to store a different value.
 Likewise, CoralDB closes the connection after a response has been sent to the client.
 
+**Command Index:**
+* [SET](#SET) Inserts or updates a value into the database.
+
 ### SET
 
 **Usage**: ```SET key "value"```
