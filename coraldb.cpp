@@ -121,6 +121,7 @@ int test_save_file_permissions()
 
 void save_datafile()
 {
+    //TODO compress checkpoint data
     std::lock(global_db_mutex, checkpoint_file_mutex);
     std::ofstream db_file;
     std::cout << "CoralDB: Performing checkpoint to " << global_filename << std::endl;
