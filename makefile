@@ -18,7 +18,7 @@ SOURCE = coraldb.cpp
 OUT = coraldb
 
 # --- Compilation Flags ---
-FLAGS = -Wall -std=gnu++11 -fpermissive
+FLAGS = -Wall -std=gnu++11 -fpermissive -pthread
 
 # --- Build Rules ---
 # Build CoralDB
