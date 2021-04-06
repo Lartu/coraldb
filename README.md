@@ -62,8 +62,8 @@ Command | Description
 
 **PROBE** succeeds if the `key` exists within the database, otherwise it fails.
 * Responses:
-  * `OK.` for successful operations.
-  * `ERROR.` for unsuccessful operations.
+  * `FOUND.` for successful operations.
+  * `NOT-FOUND.` for unsuccessful operations.
 
 ### DROP
 
