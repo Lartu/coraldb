@@ -27,8 +27,15 @@ Messages sent by CoralDB always end with said character sequence, too.
 A client must establish a new connection to CoralDB every time it wants to store a different value.
 Likewise, CoralDB closes the connection after a response has been sent to the client.
 
-**Command Index:**
-* [SET](#SET) Inserts or updates a value into the database.
+## Command Index
+Command | Description
+:---: | :---:
+[SET](#SET) | Inserts or updates a value into the database.
+[GET](#GET) | Fetches a value from the database.
+[PROBE](#PROBE) | Checks if a key exists the database.
+[DROP](#DROP) | Removes a key-value pair from the database.
+[PING](#PING) | Checks if the database is online.
+[CHECKPOINT](#CHECKPOINT) | Forces a database checkpoint save.
 
 ### SET
 
