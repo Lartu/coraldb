@@ -8,7 +8,7 @@
 </p>
 
 # CoralDB
-An extremely simple in-memory key-value database for \*nix systems, **CoralDB** has been designed with simplicity in mind. It works as a remote dictionary that can perform search, insertion, deletion and retrieval of string-string key-value pairs. Being an in-memory system, operations are handled extremely fast. For long term storage, cyclical *checkpoint* saves are executed.
+An extremely simple in-memory key-value database for distributed applications and microservices, **CoralDB** has been designed with simplicity in mind. It works as a remote dictionary that can perform search, insertion, deletion and retrieval of string-string key-value pairs. Being an in-memory system, operations are handled extremely fast. For long term storage, cyclical *checkpoint* saves are executed.
 
 # Building and installation
 * To **build** CoralDB, clone this repository and run `make` in it. C++11 is required.
