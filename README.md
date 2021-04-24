@@ -1,10 +1,10 @@
 <p align="center">
   <img src="https://github.com/Lartu/coraldb/blob/main/coraldblogo.png">
   <br><br>
-  <img src="https://img.shields.io/badge/dev._version-v1.0.0-blue.svg">
+  <img src="https://img.shields.io/badge/dev._version-v1.1.0-blue.svg">
   <img src="https://img.shields.io/badge/license-BSD_2.0-purple">
   <img src="https://img.shields.io/badge/corals-lots-yellow">
-  <img src="https://img.shields.io/badge/prod._ready-almost-orange">
+  <img src="https://img.shields.io/badge/prod._ready-probably-green">
 </p>
 
 # CoralDB
@@ -22,6 +22,7 @@ information on how to launch CoralDB with a custom configuration.
 
 Programs can connect to CoralDB to access the database system using its port and IP address (`localhost` for local systems). To communicate with
 CoralDB, 6 commands can be used, sent via a normal TCP socket stream. Sent messages **must** be terminated using the `\r\n` character sequence.
+Also, messages may not contain the `\r\n` character sequence, even within quotes.
 Messages sent by CoralDB always end with said character sequence, too.
 
 A client must establish a new connection to CoralDB every time it wants to store a different value.
@@ -36,6 +37,8 @@ Command | Description
 [DROP](#DROP) | Removes a key-value pair from the database.
 [PING](#PING) | Checks if the database is online.
 [CHECKPOINT](#CHECKPOINT) | Forces a database checkpoint save.
+[SETKEY](#SETKEY) | Sets a database password.
+[KEY](#KEY) | Authenticates with the database password.
 
 ### SET
 
@@ -89,6 +92,19 @@ Command | Description
 **CHECKPOINT** can be used to trigger a checkpoint save.
 * Responses:
   * `OK.` once the checkpoint save has finished.
+
+**Usage**: ```SETKEY password```
+
+**SETKEY** can be used to protect the database behind a password. Once a password is set, unauthenticated commands will
+be rejected with the `WRONG-KEY.` error message.
+* Responses:
+  * `OK.` once the password has been set.
+
+**Usage**: ```KEY password <command>```
+
+**KEY** can be used to authenticate your request with a password. It's mandatory for databases that have previously
+set a password. To use the KEY command, prepend it to another command. For example, if you want to run `GET mydata`
+on a database protected behind the `123456` password, run `KEY 123456 GET mydata`.
 
 # Example Session
 
