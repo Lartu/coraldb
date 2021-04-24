@@ -94,18 +94,24 @@ Command | Description
 * Responses:
   * `OK.` once the checkpoint save has finished.
 
+### SETKEY
+
 **Usage**: ```SETKEY password```
 
 **SETKEY** can be used to protect the database behind a password. Once a password is set, unauthenticated commands will
 be rejected with the `WRONG-KEY.` error message.
 * Responses:
   * `OK.` once the password has been set.
+  
+### DELKEY
 
 **Usage**: ```DELKEY```
 
 **SETKEY** can be used to remove the database password.
 * Responses:
   * `OK.` once the password has removed.
+  
+### KEY
 
 **Usage**: ```KEY password <command>```
 
