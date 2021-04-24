@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://github.com/Lartu/coraldb/blob/main/coraldblogo.png">
   <br><br>
-  <img src="https://img.shields.io/badge/dev._version-v1.1.1-blue.svg">
+  <img src="https://img.shields.io/badge/dev._version-v1.1.3-blue.svg">
   <img src="https://img.shields.io/badge/license-BSD_2.0-purple">
   <img src="https://img.shields.io/badge/corals-lots-yellow">
   <img src="https://img.shields.io/badge/prod._ready-probably-green">
@@ -99,7 +99,7 @@ Command | Description
 **Usage**: ```SETKEY password```
 
 **SETKEY** can be used to protect the database behind a password. Once a password is set, unauthenticated commands will
-be rejected with the `WRONG-KEY.` error message.
+be rejected with the `WRONG-KEY.` error message after a random number of seconds.
 * Responses:
   * `OK.` once the password has been set.
   

@@ -28,7 +28,7 @@
 #include "execute.cpp"
 #include "checkpoint.cpp"
 
-#define VERSION "1.1.2"
+#define VERSION "1.1.3"
 
 unsigned int global_port = 26725;
 char KEY_ERROR_MSG[] = "WRONG-KEY.\r\n";

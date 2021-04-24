@@ -3,6 +3,9 @@
  * This file contains the implementation for the command parser and runner.
  */
 
+// Included files
+#include <stdlib.h>
+
 // Global Objects
 char FOUND_MSG[] = "FOUND.\r\n";
 char NOT_FOUND_MSG[] = "NOT-FOUND.\r\n";
@@ -68,7 +71,27 @@ int execute_command(std::string &command, unsigned int socket_fd)
     {
         if (tokens.size() < 2)
             return 1;
-        if (tokens[1] == database_key)
+        std::string received_key = tokens[1];
+        std::string comparing_key = database_key;
+        bool is_key_equal = true;
+        // Fill buffers for full-buffer comparison
+        while (received_key.length() < comparing_key.length())
+        {
+            received_key += ' ';
+        }
+        while (comparing_key.length() < received_key.length())
+        {
+            comparing_key += ' ';
+        }
+        // Compare buffers
+        for (size_t i = 0; i < comparing_key.length(); ++i)
+        {
+            if (comparing_key[i] != received_key[i])
+            {
+                is_key_equal = false;
+            }
+        }
+        if (is_key_equal)
         {
             authenticated = true;
             tokens.erase(tokens.begin()); // Remove KEY command
@@ -79,6 +102,8 @@ int execute_command(std::string &command, unsigned int socket_fd)
     // If not authenticated, throw error
     if (!authenticated && !database_key.empty())
     {
+        srand(time(NULL));
+        sleep((rand() % 20) * 0.1 + 1); // Wait a random number of seconds
         return 3;
     }
 
