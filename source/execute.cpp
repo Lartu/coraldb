@@ -3,6 +3,9 @@
  * This file contains the implementation for the command parser and runner.
  */
 
+#define MIN_WAIT 1
+#define MAX_WAIT 4
+
 // Included files
 #include <stdlib.h>
 
@@ -103,7 +106,7 @@ int execute_command(std::string &command, unsigned int socket_fd)
     if (!authenticated && !database_key.empty())
     {
         srand(time(NULL));
-        sleep((rand() % 20) * 0.1 + 1); // Wait a random number of seconds
+        sleep((rand() % (MAX_WAIT * 10)) * 0.1 + MIN_WAIT); // Wait a random number of seconds
         return 3;
     }
 

@@ -1,6 +1,6 @@
 from coraldb import CoralDBConnector, CoralDBResult
 
-# Connect to CoralDB
+# Set the CoralDB connection information
 connector = CoralDBConnector("localhost", 26725)
 
 # Set a key

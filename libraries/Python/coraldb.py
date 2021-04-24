@@ -105,10 +105,10 @@ class CoralDBConnector:
                     if not data:
                         break
                     total_data += data.decode("utf-8")
-                    if "\n" in total_data:
+                    if "\r\n" in total_data:
                         break
-            if "\n" in total_data:
-                total_data = total_data.split("\n")[0]
+            if "\r\n" in total_data:
+                total_data = total_data.split("\r\n")[0]
             return total_data
         except ConnectionRefusedError:
             raise Exception("CoralDB cannot be reached.")

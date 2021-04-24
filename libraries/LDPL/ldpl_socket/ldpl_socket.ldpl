@@ -1,0 +1,98 @@
+extension "ldpl_socket.cpp"
+
+data:
+    LDPL_SOCKET_MSG is external text
+    LDPL_SOCKET_IP is external text
+    LDPL_SOCKET_PORT is external number
+    LDPL_SOCKET_NUMBER is external number 
+    LDPL_SOCKET_BYTES is external number 
+
+    ldpl.socket.msg is text
+    ldpl.socket.ip is text
+    ldpl.socket.port is number
+    ldpl.socket.number is number 
+procedure:
+
+sub ldpl.socket.connect
+    parameters:
+        ip is text
+        port is number
+        socket_number is number
+    procedure:
+        store ip in LDPL_SOCKET_IP
+        store port in LDPL_SOCKET_PORT
+        call external LDPL_SOCKET_CONNECT
+        store LDPL_SOCKET_NUMBER in socket_number 
+end sub
+create statement "SOCKET CONNECT TO $ AT $ IN $" executing ldpl.socket.connect
+
+sub ldpl.socket.close
+    parameters:
+        socket_dest is number
+    procedure:
+        store socket_dest in LDPL_SOCKET_NUMBER
+        call external LDPL_SOCKET_CLOSE
+end sub
+create statement "SOCKET CLOSE $" executing ldpl.socket.close
+
+sub ldpl.socket.read
+    parameters:
+        sock is number
+        msg_var is text
+    procedure:
+        store sock in LDPL_SOCKET_NUMBER
+        call external LDPL_SOCKET_READ
+        store LDPL_SOCKET_MSG in msg_var
+end sub
+create statement "SOCKET READ FROM $ in $" executing ldpl.socket.read
+
+sub ldpl.socket.read-bytes
+    parameters:
+        sock is number
+        msg_var is text
+        bytes_var is number
+    procedure:
+        call ldpl.socket.read with sock msg_var 
+        store LDPL_SOCKET_BYTES in bytes_var
+end sub
+create statement "SOCKET READ FROM $ IN $ BYTES IN $" executing ldpl.socket.read-bytes
+
+sub ldpl.socket.send
+    parameters:
+        message is text
+        socket_dest is number
+    procedure:
+        store message in LDPL_SOCKET_MSG
+        store socket_dest in LDPL_SOCKET_NUMBER
+        call external LDPL_SOCKET_SENDMESSAGE
+end sub
+create statement "SOCKET SEND $ TO $" executing ldpl.socket.send
+
+sub ldpl.socket.send-bytes
+    parameters:
+        message is text
+        socket_dest is number
+        bytes_var is number
+    procedure:
+        call ldpl.socket.send with message socket_dest
+        store LDPL_SOCKET_BYTES in bytes_var
+end sub
+create statement "SOCKET SEND $ TO $ BYTES IN $" executing ldpl.socket.send-bytes
+
+sub ldpl.socket.set-blocking
+    parameters:
+        socket_dest is number
+    procedure:
+        store socket_dest in LDPL_SOCKET_NUMBER
+        call external LDPL_SOCKET_SET_BLOCKING
+end sub
+create statement "SOCKET SET BLOCKING $" executing ldpl.socket.set-blocking
+
+sub ldpl.socket.set-nonblocking
+    parameters:
+        socket_dest is number
+    procedure:
+        store socket_dest in LDPL_SOCKET_NUMBER
+        call external LDPL_SOCKET_SET_NONBLOCKING
+end sub
+create statement "SOCKET SET NONBLOCKING $" executing ldpl.socket.set-nonblocking

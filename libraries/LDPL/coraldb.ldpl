@@ -1,0 +1,271 @@
+include "ldpl_socket/ldpl_socket.ldpl"
+
+data:
+__CORALDB_ADDRESS is text
+__CORALDB_PORT is number
+__CORALDB_PASSWORD is text
+__CORALDB_SOCKET_NUMBER is number
+
+procedure:
+sub __coraldb_set_address_port
+    # Sets the CoralDB address and port
+    parameters:
+        address is text
+        port is number
+    procedure:
+        store address in __CORALDB_ADDRESS
+        store port in __CORALDB_PORT
+end sub
+create statement "CORALDB SET ADDRESS $ PORT $" executing __coraldb_set_address_port
+
+sub __coraldb_set_password
+    # Sets the CoralDB authentication password
+    parameters:
+        password is text
+    procedure:
+        store password in __CORALDB_PASSWORD
+end sub
+create statement "CORALDB AUTH PASSWORD $" executing __coraldb_set_password
+
+sub __coraldb_set
+    # Sets a Key-Value pair in the database. Returns a map where map:"result"
+    # contains "ok" if the command worked fine, "error" if it failed and
+    # "wrong pass" if the database authentication failed.
+    parameters:
+        key is text
+        value is text
+        result_map is text map
+    local data:
+        command is text
+        result is text
+    procedure:
+        replace "\"" from value with "\\\"" in value
+        in command join "SET " key " \"" value "\""
+        call __coraldb_run_connection with command result
+        clear result_map
+        if result is equal to "OK." then
+            store "ok" in result_map:"result"
+        else if result is equal to "ERROR." then
+            store "error" in result_map:"result"
+        else if result is equal to "WRONG-KEY." then
+            store "wrong pass" in result_map:"result"
+        end if
+end sub
+create statement "CORALDB SET KEY $ VALUE $ RESULT $" executing __coraldb_set
+
+sub __coraldb_get
+    # Gets a value from the database using its key. Returns a map where 
+    # map:"result" contains "ok" if the command worked fine, "error" if it 
+    # failed and "wrong pass" if the database authentication failed. And
+    # map:"value" contains the value if the command worked fine.
+    parameters:
+        key is text
+        result_map is text map
+    local data:
+        command is text
+        result is text
+        result_length is number
+        substr_to is number
+    procedure:
+        in command join "GET " key
+        call __coraldb_run_connection with command result
+        clear result_map
+        if result is equal to "ERROR." then
+            store "error" in result_map:"result"
+        else if result is equal to "WRONG-KEY." then
+            store "wrong pass" in result_map:"result"
+        else
+            store "ok" in result_map:"result"
+            get length of result in result_length
+            subtract 2 from result_length in result_length
+            substring result from 1 length result_length in result
+            store result in result_map:"value"
+        end if
+end sub
+create statement "CORALDB GET KEY $ RESULT $" executing __coraldb_get
+
+sub __coraldb_probe
+    # Probes the database for a value using its key. Returns a map where 
+    # map:"result" contains "ok" if the command worked fine, "error" if it 
+    # failed and "wrong pass" if the database authentication failed. And
+    # map:"value" contains "found" if the value was found, or "not-found" if
+    # it wasn't.
+    parameters:
+        key is text
+        result_map is text map
+    local data:
+        command is text
+        result is text
+        result_length is number
+        substr_to is number
+    procedure:
+        in command join "PROBE " key
+        call __coraldb_run_connection with command result
+        clear result_map
+        if result is equal to "ERROR." then
+            store "error" in result_map:"result"
+        else if result is equal to "WRONG-KEY." then
+            store "wrong pass" in result_map:"result"
+        else
+            store "ok" in result_map:"result"
+            if result is equal to "FOUND." then
+                store "found" in result_map:"value"
+            else
+                store "not found" in result_map:"value"
+            end if
+        end if
+end sub
+create statement "CORALDB PROBE KEY $ RESULT $" executing __coraldb_probe
+
+sub __coraldb_drop
+    # Drops the key-value pair with key 'key'. Returns a map where map:"result"
+    # contains "ok" if the command worked fine, "error" if it failed and
+    # "wrong pass" if the database authentication failed.
+    parameters:
+        key is text
+        result_map is text map
+    local data:
+        command is text
+        result is text
+    procedure:
+        in command join "DROP " key
+        call __coraldb_run_connection with command result
+        clear result_map
+        if result is equal to "OK." then
+            store "ok" in result_map:"result"
+        else if result is equal to "ERROR." then
+            store "error" in result_map:"result"
+        else if result is equal to "WRONG-KEY." then
+            store "wrong pass" in result_map:"result"
+        end if
+end sub
+create statement "CORALDB DROP KEY $ RESULT $" executing __coraldb_drop
+
+sub __coraldb_ping
+    # Pings the database. Returns a map where map:"result"
+    # contains "ok" if the command worked fine, "error" if it failed and
+    # "wrong pass" if the database authentication failed.
+    parameters:
+        result_map is text map
+    local data:
+        command is text
+        result is text
+    procedure:
+        store "PING" in command
+        call __coraldb_run_connection with command result
+        clear result_map
+        if result is equal to "OK." then
+            store "ok" in result_map:"result"
+        else if result is equal to "ERROR." then
+            store "error" in result_map:"result"
+        else if result is equal to "WRONG-KEY." then
+            store "wrong pass" in result_map:"result"
+        end if
+end sub
+create statement "CORALDB PING RESULT $" executing __coraldb_ping
+
+sub __coraldb_checkpoint
+    # Forces a database checkpoint. Returns a map where map:"result"
+    # contains "ok" if the command worked fine, "error" if it failed and
+    # "wrong pass" if the database authentication failed.
+    parameters:
+        result_map is text map
+    local data:
+        command is text
+        result is text
+    procedure:
+        store "CHECKPOINT" in command
+        call __coraldb_run_connection with command result
+        clear result_map
+        if result is equal to "OK." then
+            store "ok" in result_map:"result"
+        else if result is equal to "ERROR." then
+            store "error" in result_map:"result"
+        else if result is equal to "WRONG-KEY." then
+            store "wrong pass" in result_map:"result"
+        end if
+end sub
+create statement "CORALDB CHECKPOINT RESULT $" executing __coraldb_checkpoint
+
+sub __coraldb_setkey
+    # Sets the database authentication password. Returns a map where 
+    # map:"result" contains "ok" if the command worked fine, "error" if it 
+    # failed and "wrong pass" if the database authentication failed.
+    parameters:
+        key is text
+        result_map is text map
+    local data:
+        command is text
+        result is text
+        result_length is number
+        substr_to is number
+    procedure:
+        in command join "SETKEY " key
+        call __coraldb_run_connection with command result
+        clear result_map
+        if result is equal to "ERROR." then
+            store "error" in result_map:"result"
+        else if result is equal to "WRONG-KEY." then
+            store "wrong pass" in result_map:"result"
+        else
+            store "ok" in result_map:"result"
+        end if
+end sub
+create statement "CORALDB SET PASSWORD $ RESULT $" executing __coraldb_setkey
+
+
+sub __coraldb_delkey
+    # Deletes the database password. Returns a map where map:"result"
+    # contains "ok" if the command worked fine, "error" if it failed and
+    # "wrong pass" if the database authentication failed.
+    parameters:
+        result_map is text map
+    local data:
+        command is text
+        result is text
+    procedure:
+        store "DELKEY" in command
+        call __coraldb_run_connection with command result
+        clear result_map
+        if result is equal to "OK." then
+            store "ok" in result_map:"result"
+        else if result is equal to "ERROR." then
+            store "error" in result_map:"result"
+        else if result is equal to "WRONG-KEY." then
+            store "wrong pass" in result_map:"result"
+        end if
+end sub
+create statement "CORALDB DELETE PASSWORD RESULT $" executing __coraldb_delkey
+
+sub __coraldb_run_connection
+    parameters:
+        command is text
+        result is text
+    local data:
+        full_command is text
+        full_response is text
+        response is text
+        crlf_position is number
+        bytes is number
+    procedure:
+        in full_command join command "\r\n"
+        if __CORALDB_PASSWORD is not equal to "" then
+            in full_command join "KEY " __CORALDB_PASSWORD " " full_command " \r\n"
+        end if
+        SOCKET CONNECT TO __CORALDB_ADDRESS AT __CORALDB_PORT IN __CORALDB_SOCKET_NUMBER
+        SOCKET SEND full_command TO __CORALDB_SOCKET_NUMBER
+        # Read response
+        while 1 is equal to 1 do
+            socket read from __CORALDB_SOCKET_NUMBER in response bytes in bytes
+            if bytes is equal to 0 then
+                break
+            end if
+            in full_response join full_response response
+            get index of "\r\n" from full_response in crlf_position
+            if crlf_position is not equal to -1 then
+                break
+            end if
+        repeat
+        SOCKET CLOSE __CORALDB_SOCKET_NUMBER
+        trim full_response in result
+end sub

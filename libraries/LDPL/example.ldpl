@@ -1,0 +1,62 @@
+include "coraldb.ldpl"
+
+data:
+command-result is text map
+
+procedure:
+
+# Set the CoralDB connection information
+coraldb set address "localhost" port 26725
+
+# Set key-values
+coraldb set key "mykey" value "myvalue" result command-result
+coraldb set key "hw" value "Hello World!!!" result command-result
+coraldb set key "kthxbye" value "Hasta la vista!" result command-result
+
+# Retrieve key
+coraldb get key "hw" result command-result
+if command-result:"result" is equal to "ok" then
+    display "Got value: " command-result:"value" crlf
+else if command-result:"result" is equal to "error" then
+    display "Command execution failed." crlf
+else if command-result:"result" is equal to "wrong pass" then
+    display "Authentication failed." crlf
+end if
+
+# Set database password
+coraldb set password "123456" result command-result
+
+# This command will fail because we are not authenticated
+coraldb get key "kthxbye" result command-result
+if command-result:"result" is equal to "ok" then
+    display "Got value: " command-result:"value" crlf
+else if command-result:"result" is equal to "error" then
+    display "Command execution failed." crlf
+else if command-result:"result" is equal to "wrong pass" then
+    display "Authentication failed." crlf
+end if
+
+# Set authentication password for future commands
+coraldb auth password "123456"
+
+# Try again, now authenticated
+coraldb get key "kthxbye" result command-result
+if command-result:"result" is equal to "ok" then
+    display "Got value: " command-result:"value" crlf
+else if command-result:"result" is equal to "error" then
+    display "Command execution failed." crlf
+else if command-result:"result" is equal to "wrong pass" then
+    display "Authentication failed." crlf
+end if
+
+# Remove database password
+coraldb delete password result command-result
+
+# Don't use authentication password
+coraldb auth password ""
+
+# Now we can run commands unauthenticated again
+coraldb ping result command-result
+if command-result:"result" is equal to "ok" then
+    display "Pong!" crlf
+end if
