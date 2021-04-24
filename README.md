@@ -37,7 +37,8 @@ Command | Description
 [DROP](#DROP) | Removes a key-value pair from the database.
 [PING](#PING) | Checks if the database is online.
 [CHECKPOINT](#CHECKPOINT) | Forces a database checkpoint save.
-[SETKEY](#SETKEY) | Sets a database password.
+[SETKEY](#SETKEY) | Sets the database password.
+[DELKEY](#DELKEY) | Removes the database password.
 [KEY](#KEY) | Authenticates with the database password.
 
 ### SET
@@ -100,6 +101,12 @@ be rejected with the `WRONG-KEY.` error message.
 * Responses:
   * `OK.` once the password has been set.
 
+**Usage**: ```DELKEY```
+
+**SETKEY** can be used to remove the database password.
+* Responses:
+  * `OK.` once the password has removed.
+
 **Usage**: ```KEY password <command>```
 
 **KEY** can be used to authenticate your request with a password. It's mandatory for databases that have previously
@@ -124,6 +131,12 @@ CoralDB: OK.
 Client:  GET color2
 CoralDB: ERROR.
 ```
+
+# CoralDB Libraries
+
+While coding your own CoralDB connector is a really easy task (that's what CoralDB was designed for), a number of
+CoralDB libraries for your favourite programming languages have been coded. They can be found in the [Libraries](libraries)
+directory of this repository.
 
 # I need help! I want to contribute!
 

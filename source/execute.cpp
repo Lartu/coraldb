@@ -170,5 +170,10 @@ int execute_command(std::string &command, unsigned int socket_fd)
         database_key = tokens[1];
         return 0;
     }
+    else if (tokens[0] == "DELKEY")
+    {
+        database_key = "";
+        return 0;
+    }
     return 1;
 }
