@@ -55,3 +55,9 @@ void err_socket_accept(char *argument)
     err_header();
     std::cerr << "Socket accept failed: " << argument << std::endl;
 }
+
+void err_malformed_command_load(const std::string &argument)
+{
+    err_header();
+    std::cerr << "Malformed command found in checkpoint file: " << argument << std::endl;
+}

@@ -24,10 +24,16 @@ void load_checkpoint()
     while (std::getline(checkpoint_file, line))
     {
         if (execute_command(line, 0) == 0)
+        {
             ++loaded;
+        }
+        else
+        {
+            err_malformed_command_load(line);
+        }
     }
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "CoralDB: Loaded " << loaded << " values in " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << " ms" << std::endl;
+    std::cout << "CoralDB: Executed " << loaded << " startup commands in " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << " ms" << std::endl;
 }
 
 int test_save_file_permissions()
@@ -56,9 +62,14 @@ void save_datafile()
     std::cout << "CoralDB: Performing checkpoint to " << global_filename << std::endl;
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     db_file.open(global_filename);
+    // Here we just use \n because we are going to load the values with getline
     for (auto &it : global_db)
     {
-        db_file << "SET " << it.first << " \"" << it.second << "\"\r\n";
+        db_file << "SET " << it.first << " \"" << it.second << "\"\n";
+    }
+    if (!database_key.empty())
+    {
+        db_file << "SETKEY " << database_key << "\n";
     }
     db_file.flush();
     db_file.close();

@@ -17,6 +17,7 @@ void err_expected_switch_value(const std::string &argument);
 void err_socket_creation(char *argument);
 void err_socket_read(char *argument);
 void err_socket_accept(char *argument);
+void err_malformed_command_load(const std::string &argument);
 
 // execute.cpp
 int execute_command(std::string &command, unsigned int socket_fd);
