@@ -93,6 +93,8 @@ Command | Description
 * Responses:
   * `OK.` once the checkpoint save has finished.
 
+### SETKEY
+
 **Usage**: ```SETKEY password```
 
 **SETKEY** can be used to protect the database behind a password. Once a password is set, unauthenticated commands will
@@ -101,6 +103,8 @@ be rejected with the `WRONG-KEY.` error message.
   * `OK.` once the password has been set.
 
 **Usage**: ```KEY password <command>```
+
+### KEY
 
 **KEY** can be used to authenticate your request with a password. It's mandatory for databases that have previously
 set a password. To use the KEY command, prepend it to another command. For example, if you want to run `GET mydata`
