@@ -141,8 +141,8 @@ CoralDB: ERROR.
 # CoralDB Libraries
 
 While coding your own CoralDB connector is a really easy task (that's what CoralDB was designed for), a number of
-CoralDB libraries for your favourite programming languages have been coded. They can be found in the [Libraries](libraries)
-directory of this repository.
+CoralDB libraries for your favourite programming languages may exist. They can be found in the [Libraries](libraries)
+directory of this repository. If you write your own, please let me know so I can add it here!
 
 # I need help! I want to contribute!
 
