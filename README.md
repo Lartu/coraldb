@@ -102,9 +102,9 @@ be rejected with the `WRONG-KEY.` error message.
 * Responses:
   * `OK.` once the password has been set.
 
-**Usage**: ```KEY password <command>```
-
 ### KEY
+
+**Usage**: ```KEY password <command>```
 
 **KEY** can be used to authenticate your request with a password. It's mandatory for databases that have previously
 set a password. To use the KEY command, prepend it to another command. For example, if you want to run `GET mydata`
